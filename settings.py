@@ -1,0 +1,8 @@
+gameName = 'BOX'
+SCREEN_DIM = (800,416)
+FPS = 40
+
+
+#define COLORS
+WHITE = (255,255,255)
+BLACK = (0,0,0)
