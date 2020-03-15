@@ -6,8 +6,10 @@ HEIGHT = 416
 FPS = 40
 
 PLAYER_VEL = 0.2
+PLAYER_VEL_Y = 0
+PLAYER_GRAVITY = 0.0002
 #Loading box image
-box_img = pygame.image.load("Drawables/box_img.png")
+box_img = pygame.image.load("Drawables/box_img_50x50.png")
 
 #define COLORS
 WHITE = (255,255,255)
