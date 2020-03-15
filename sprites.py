@@ -31,8 +31,7 @@ class Player(pg.sprite.Sprite):
             self.pos.x += PLAYER_VEL
 
 
-        u=v
-        self.pos.y = (u**2 - v**2)/2*(0.5)
+
 
 
 

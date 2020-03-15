@@ -2,6 +2,7 @@ import pygame as pg
 import numpy
 import math
 from settings import *
+from sprites import *
 #Initializing the pygame library
 pg.init()
 #Set Caption to the window
@@ -34,8 +35,8 @@ class Game():
                     if img_new_game.get_rect().collidepoint(x, y):
                         self.run()
             #Background image
-            img_new_game = pg.image.load("Drawables\\test_new.png")
-            bg = pg.image.load("Drawables\\menu_background.png")
+            img_new_game = pg.image.load("Drawables/test_new.png")
+            bg = pg.image.load("Drawables/menu_background.png")
             self.screen.blit(bg,[0,0])
             self.screen.blit(img_new_game,[400,200])
 
@@ -52,10 +53,14 @@ class Game():
             #self.clock.tick(FPS)
             self.events()
             self.update()
-            self.draw()
+            #self.draw()
 
     def update(self):
-        pass
+        self.screen.fill(WHITE)
+        self.box_pos = player.update()
+        self.screen.blit(box_img,self.box_pos)
+
+        pg.display.flip()
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -66,6 +71,8 @@ class Game():
         #self.all_sprites.draw(self.screen)
         pg.display.flip()
 g  = Game()
+player = Player()
+g.run()
 g.game_menu()
 g.show_start_screen()
 g.running = True
