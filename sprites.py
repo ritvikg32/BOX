@@ -15,14 +15,13 @@ class Player(pg.sprite.Sprite):
 #To be called after calling the update function
     #def get_box_position(self):
      #    return self.pos
-
+    v = PLAYER_VEL_Y
+    iteration_counter = 0
+    time = iteration_counter/20
 
     def update(self):
         PLAYER_INITIAL_Y = 0
-        for event in pg.event.get():
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    self.vel.y -= PLAYER_INITIAL_Y
+
 
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
@@ -30,9 +29,11 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_RIGHT]:
             self.pos.x += PLAYER_VEL
 
+        #Adding gravity to the box
+        self.gravity()
 
-        u=v
-        self.pos.y = (u**2 - v**2)/2*(0.5)
+
+        #Sitting on the sprites condition
 
 
 
@@ -41,12 +42,20 @@ class Player(pg.sprite.Sprite):
             self.pos.x = 0
         if self.pos.x < 0:
             self.pos.x = WIDTH
+        if self.pos.y > HEIGHT-50:
+            self.pos.y = HEIGHT-50
 
 
 
         return (int(self.pos.x),int(self.pos.y))
         #Ties the camera with the position of the player
         #self.rect.midbottom = self.pos
+
+    def gravity(self):
+        # player gravity
+        self.v += PLAYER_GRAVITY * self.time
+        self.pos.y = self.v * self.time + (0.5) * (PLAYER_GRAVITY) * (self.time ** 2)
+        self.time += 0.05
 
 class Platform(pg.sprite.Sprite):
     def __init__(self, x, y, w, h):

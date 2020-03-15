@@ -1,61 +1,44 @@
 import pygame as pg
 import numpy
 import math
-from sprites import *
 from settings import *
+from sprites import *
 #Initializing the pygame library
 pg.init()
 #Set Caption to the window
 
 pg.display.set_caption(gameName)
 
-gameDisplay = pg.display.set_mode((WIDTH,HEIGHT))
+gameDisplay = pg.display.set_mode(SCREEN_DIM)
 
 gameRunning = True
 intro = True
-
 class Game():
 
     def __init__(self):
         #initializing the game window
         pg.init()
-        self.icon = pg.image.load("Drawables\\main_logo.png")
-        pg.display.set_icon(self.icon)
-        self.screen = pg.display.set_mode((WIDTH,HEIGHT))
+        self.screen = pg.display.set_mode(SCREEN_DIM)
         pg.display.set_caption(gameName)
         #self.clock = pg.time.clock()
         self.running = True
     def new(self):
-        # initialize all variables and do all the setup for a new game
-        self.all_sprites = pg.sprite.Group()
-        #self.walls = pg.sprite.Group()
-        #self.mobs = pg.sprite.Group()
-        #self.bullets = pg.sprite.Group()
-        # for row, tiles in enumerate(self.map.data):
-        #     for col, tile in enumerate(tiles):
-        #         if tile == '1':
-        #             Wall(self, col, row)
-        #         if tile == 'M':
-        #             Mob(self, col, row)
-        #         if tile == 'P':
-        #             self.player = Player(self, col, row)
-
-
-        #self.camera = Camera(self.map.width, self.map.height)
-
+        pass
     def game_menu(self):
         while intro:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
                     quit()
-
-
-
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+                    if img_new_game.get_rect().collidepoint(x, y):
+                        self.run()
             #Background image
-            img_new_game = pg.image.load("Drawables\\test_new.png")
-            bg = pg.image.load("Drawables\\menu_background_1024x768.png")
+            img_new_game = pg.image.load("Drawables/test_new.png")
+            bg = pg.image.load("Drawables/menu_background.png")
             self.screen.blit(bg,[0,0])
+            self.screen.blit(img_new_game,[400,200])
 
             pg.display.flip()
 
@@ -70,11 +53,14 @@ class Game():
             #self.clock.tick(FPS)
             self.events()
             self.update()
-            self.draw()
+            #self.draw()
 
     def update(self):
-        pass
-        #self.player = Player
+        self.screen.fill(WHITE)
+        self.box_pos = player.update()
+        self.screen.blit(box_img,self.box_pos)
+
+        pg.display.flip()
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -82,17 +68,13 @@ class Game():
                 self.running = False
     def draw(self):
         self.screen.fill(WHITE)
-        curr_pos = player.update()
-        self.screen.blit(box_img, curr_pos)
         #self.all_sprites.draw(self.screen)
         pg.display.flip()
-
-
-player = Player()
 g  = Game()
+player = Player()
 g.run()
-#g.new()
-#g.game_menu()
+g.game_menu()
+g.show_start_screen()
 g.running = True
 while g.running:
     g.run()
