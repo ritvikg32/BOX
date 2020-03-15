@@ -27,7 +27,7 @@ class Game():
         self.running = True
     def new(self):
         # initialize all variables and do all the setup for a new game
-        #self.all_sprites = pg.sprite.Group()
+        self.all_sprites = pg.sprite.Group()
         #self.walls = pg.sprite.Group()
         #self.mobs = pg.sprite.Group()
         #self.bullets = pg.sprite.Group()
@@ -39,8 +39,9 @@ class Game():
         #             Mob(self, col, row)
         #         if tile == 'P':
         #             self.player = Player(self, col, row)
-        self.player = Player(self, 5, 5)
-        self.camera = Camera(self.map.width, self.map.height)
+
+
+        #self.camera = Camera(self.map.width, self.map.height)
 
     def game_menu(self):
         while intro:
@@ -73,6 +74,7 @@ class Game():
 
     def update(self):
         pass
+        #self.player = Player
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -80,14 +82,17 @@ class Game():
                 self.running = False
     def draw(self):
         self.screen.fill(WHITE)
+        curr_pos = player.update()
+        self.screen.blit(box_img, curr_pos)
         #self.all_sprites.draw(self.screen)
         pg.display.flip()
 
 
-
+player = Player()
 g  = Game()
-g.game_menu()
-g.show_start_screen()
+g.run()
+#g.new()
+#g.game_menu()
 g.running = True
 while g.running:
     g.run()

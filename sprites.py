@@ -2,38 +2,51 @@
 import pygame as pg
 from settings import *
 vec = pg.math.Vector2
-
 class Player(pg.sprite.Sprite):
     def __init__(self):
         pg.sprite.Sprite.__init__(self)
         self.box = box_img
         #self.rect = self.image.get_rect()
         #self.rect.center = (WIDTH / 2, HEIGHT / 2)
-        self.pos = vec(WIDTH / 2, HEIGHT / 2)
+        self.pos = vec(WIDTH/2,0)
         self.vel = vec(0, 0)
-        self.acc = vec(0, 0)
+        self.acc = vec(0, 0.5)
+
+#To be called after calling the update function
+    #def get_box_position(self):
+     #    return self.pos
+
 
     def update(self):
-        self.acc = vec(0, 0.5)
+        PLAYER_INITIAL_Y = 0
+        for event in pg.event.get():
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    self.vel.y -= PLAYER_INITIAL_Y
+
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
-            self.acc.x = -PLAYER_ACC
+            self.pos.x -= PLAYER_VEL
         if keys[pg.K_RIGHT]:
-            self.acc.x = PLAYER_ACC
+            self.pos.x += PLAYER_VEL
 
-        # apply friction
-        self.acc.x += self.vel.x * PLAYER_FRICTION
-        # equations of motion
-        self.vel += self.acc
-        self.pos += self.vel + 0.5 * self.acc
+
+        u=v
+        self.pos.y = (u**2 - v**2)/2*(0.5)
+
+
+
         # wrap around the sides of the screen
         if self.pos.x > WIDTH:
             self.pos.x = 0
         if self.pos.x < 0:
             self.pos.x = WIDTH
 
+
+
+        return (int(self.pos.x),int(self.pos.y))
         #Ties the camera with the position of the player
-        self.rect.midbottom = self.pos
+        #self.rect.midbottom = self.pos
 
 class Platform(pg.sprite.Sprite):
     def __init__(self, x, y, w, h):
