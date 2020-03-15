@@ -21,10 +21,7 @@ class Player(pg.sprite.Sprite):
 
     def update(self):
         PLAYER_INITIAL_Y = 0
-        for event in pg.event.get():
-            if event.type == pg.KEYDOWN:
-                if event.key == pg.K_SPACE:
-                    self.vel.y -= PLAYER_INITIAL_Y
+
 
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
@@ -32,26 +29,33 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_RIGHT]:
             self.pos.x += PLAYER_VEL
 
-        #player gravity
-        self.v += PLAYER_GRAVITY*self.time
-        self.pos.y = self.v*self.time + (0.5)*(PLAYER_GRAVITY)*(self.time**2)
-        self.time+=0.05
+        #Adding gravity to the box
+        self.gravity()
 
-        #Player sitting at a surface
-        if self.pos.y == HEIGHT:
-            self.pos.y = HEIGHT
+
+        #Sitting on the sprites condition
+
+
 
         # wrap around the sides of the screen
         if self.pos.x > WIDTH:
             self.pos.x = 0
         if self.pos.x < 0:
             self.pos.x = WIDTH
+        if self.pos.y > HEIGHT-50:
+            self.pos.y = HEIGHT-50
 
 
 
         return (int(self.pos.x),int(self.pos.y))
         #Ties the camera with the position of the player
         #self.rect.midbottom = self.pos
+
+    def gravity(self):
+        # player gravity
+        self.v += PLAYER_GRAVITY * self.time
+        self.pos.y = self.v * self.time + (0.5) * (PLAYER_GRAVITY) * (self.time ** 2)
+        self.time += 0.05
 
 class Platform(pg.sprite.Sprite):
     def __init__(self, x, y, w, h):
