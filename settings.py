@@ -7,7 +7,7 @@ FPS = 40
 
 PLAYER_VEL = 0.2
 #Loading box image
-box_img = pygame.image.load("Drawables/game_logo.png")
+box_img = pygame.image.load("Drawables/box_img.png")
 
 #define COLORS
 WHITE = (255,255,255)
