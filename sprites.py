@@ -3,38 +3,55 @@ import pygame as pg
 from settings import *
 vec = pg.math.Vector2
 class Player(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,game):
         pg.sprite.Sprite.__init__(self)
-        self.box = box_img
-        #self.rect = self.image.get_rect()
-        #self.rect.center = (WIDTH / 2, HEIGHT / 2)
-        self.pos = vec(WIDTH/2,0)
+        self.image = box_img
+        self.game = game
+        self.rect = self.image.get_rect()
+        self.rect.center = (WIDTH / 2, HEIGHT / 2)
+        self.pos = vec(25,0)
         self.vel = vec(0, 0)
-        self.acc = vec(0, 0.5)
+        self.acc = vec(0, PLAYER_GRAVITY)
 
 #To be called after calling the update function
     #def get_box_position(self):
      #    return self.pos
-    v = PLAYER_VEL_Y
-    iteration_counter = 0
-    time = iteration_counter/20
+
+    def jump(self):
+        self.rect.x += 1
+        hits = pg.sprite.spritecollide(self, self.game.platforms, False)
+        self.rect.x -= 1
+        if hits:
+            self.vel.y = -15
+
+    touched = False
 
     def update(self):
-        PLAYER_INITIAL_Y = 0
+
+        self.acc = vec(0, PLAYER_GRAVITY)
 
 
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
-            self.pos.x -= PLAYER_VEL
+            self.acc.x = -PLAYER_ACC
         if keys[pg.K_RIGHT]:
-            self.pos.x += PLAYER_VEL
+            self.acc.x = PLAYER_ACC
+        if keys[pg.K_UP]:
+            self.jump()
 
+        #self.gravity()
+
+        # apply friction
+        self.acc.x += self.vel.x * PLAYER_FRICTION
+        # equations of motion
+        self.vel += self.acc
+        self.pos += self.vel + 0.5 * self.acc
         #Adding gravity to the box
-        self.gravity()
+
 
 
         #Sitting on the sprites condition
-
+        #Make the accelation and the velocity of the box 0 when the box hits the platform
 
 
         # wrap around the sides of the screen
@@ -42,20 +59,16 @@ class Player(pg.sprite.Sprite):
             self.pos.x = 0
         if self.pos.x < 0:
             self.pos.x = WIDTH
-        if self.pos.y > HEIGHT-50:
-            self.pos.y = HEIGHT-50
+        if self.pos.y > HEIGHT:
+            self.pos.y = HEIGHT
 
 
-
-        return (int(self.pos.x),int(self.pos.y))
+        #self.rect.center = self.pos
         #Ties the camera with the position of the player
-        #self.rect.midbottom = self.pos
+        self.rect.midbottom = self.pos
 
     def gravity(self):
-        # player gravity
-        self.v += PLAYER_GRAVITY * self.time
-        self.pos.y = self.v * self.time + (0.5) * (PLAYER_GRAVITY) * (self.time ** 2)
-        self.time += 0.05
+        self.acc.y = PLAYER_GRAVITY
 
 class Platform(pg.sprite.Sprite):
     def __init__(self, x, y, w, h):
@@ -65,3 +78,10 @@ class Platform(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        #for x in range(0,HEIGHT/6,50)
+        #self.x_cor = []
+        #self.y_cor = []
+        #self_pos = vec(self.x_cor,self.y_cor)
+
+   # def update(self):
+
