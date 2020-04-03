@@ -8,8 +8,8 @@ class Player(pg.sprite.Sprite):
         self.image = box_img
         self.game = game
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH / 2, HEIGHT / 2)
-        self.pos = vec(25,0)
+        self.rect.center = (WIDTH/2, HEIGHT/2)
+        self.pos = vec(350,180)
         self.vel = vec(0, 0)
         self.acc = vec(0, PLAYER_GRAVITY)
 
@@ -22,13 +22,12 @@ class Player(pg.sprite.Sprite):
         hits = pg.sprite.spritecollide(self, self.game.platforms, False)
         self.rect.x -= 1
         if hits:
-            self.vel.y = -15
+            self.vel.y = -20
 
-    touched = False
 
     def update(self):
 
-        self.acc = vec(0, PLAYER_GRAVITY)
+        self.acc = vec(0, PLAYER_GRAVITY)       #Gravity always acts
 
 
         keys = pg.key.get_pressed()
@@ -39,7 +38,6 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_UP]:
             self.jump()
 
-        #self.gravity()
 
         # apply friction
         self.acc.x += self.vel.x * PLAYER_FRICTION
@@ -59,9 +57,10 @@ class Player(pg.sprite.Sprite):
             self.pos.x = 0
         if self.pos.x < 0:
             self.pos.x = WIDTH
-        if self.pos.y > HEIGHT:
-            self.pos.y = HEIGHT
 
+        if self.pos.y > HEIGHT:
+            self.game.game_over_screen()
+            
 
         #self.rect.center = self.pos
         #Ties the camera with the position of the player
@@ -71,10 +70,10 @@ class Player(pg.sprite.Sprite):
         self.acc.y = PLAYER_GRAVITY
 
 class Platform(pg.sprite.Sprite):
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y,image):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((w, h))
-        self.image.fill(GREEN)
+        self.image = image
+        #self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -82,6 +81,7 @@ class Platform(pg.sprite.Sprite):
         #self.x_cor = []
         #self.y_cor = []
         #self_pos = vec(self.x_cor,self.y_cor)
+
 
    # def update(self):
 
